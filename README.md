@@ -235,9 +235,7 @@ Ensure the required input datasets are available in `data/processed/` before run
 - Exploratory data analysis and visualization.
 - Building interactive machine learning applications.
 
-## License
 
-This project is distributed under the MIT License. See `LICENSE` for details.
 
 ---
 
