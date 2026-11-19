@@ -1,110 +1,161 @@
-# RecoMind – AI-Powered Personalized Content Discovery Engine
+# RecoMind – AI-Powered Hybrid Recommendation System
 
-RecoMind is a hybrid article recommendation system that combines **Natural Language Processing (NLP)** and user interaction patterns to recommend relevant content.
+RecoMind is an AI-powered personalized content discovery system that recommends relevant articles by combining Content-Based Filtering and Collaborative Filtering.
 
-Built using the CI&T Deskdrop dataset, the project explores content-based filtering, collaborative filtering, and hybrid recommendation techniques to improve personalized content discovery.
+Built using the CI&T Deskdrop dataset, RecoMind analyses article content and user interaction patterns to generate personalized recommendations through a hybrid recommendation engine.
 
-##  Key Features
+The project includes data preprocessing, exploratory data analysis, recommendation model development, quantitative evaluation, and an interactive Streamlit dashboard.
+
+## Key Features
 
 - **Content-Based Filtering:** Recommends articles based on textual similarity.
-- **TF-IDF Vectorization:** Extracts meaningful features from article content.
-- **Cosine Similarity:** Measures similarity between article representations.
-- **Collaborative Filtering:** Uses user interaction patterns to identify content preferences.
-- **Hybrid Recommendation Engine:** Combines content relevance and user preferences.
-- **Engagement Analysis:** Analyses views, likes, bookmarks, follows and comments.
-- **Recommendation Evaluation:** Evaluates recommendation quality using Precision@K and Recall@K.
-- **Interactive Dashboard:** Provides an interface for exploring recommended articles.
+- **TF-IDF Vectorization:** Converts article text into numerical feature representations.
+- **Cosine Similarity:** Identifies articles with similar content.
+- **Collaborative Filtering:** Uses user-item interaction patterns to generate recommendations.
+- **Hybrid Recommendation Engine:** Combines content-based and collaborative scores using configurable weights.
+- **Exploratory Data Analysis:** Examines interaction types, article popularity, user engagement, and activity patterns.
+- **Model Evaluation:** Compares recommendation models using Precision@10, Recall@10, F1@10, MAP@10, and NDCG@10.
+- **Interactive Dashboard:** Allows users to explore analytics, compare models, and generate personalized recommendations.
 
-##  Recommendation Pipeline
+## Recommendation Architecture
 
-RecoMind uses two complementary recommendation approaches.
+RecoMind uses three recommendation approaches.
 
 ### 1. Content-Based Filtering
 
-Article descriptions and metadata are transformed into numerical representations using TF-IDF.
+Article metadata and textual content are processed using TF-IDF vectorization.
 
-Cosine similarity is then used to identify articles with similar textual characteristics.
+Cosine similarity is calculated between article representations to identify content that is similar to a user's previously interacted articles.
 
 ### 2. Collaborative Filtering
 
-User interaction data is analysed to identify relationships between users and articles.
+User interaction data is used to construct a user-item interaction matrix.
 
-This helps discover content preferences based on collective user behaviour.
+Item similarity is calculated from interaction patterns to identify articles that may interest users based on collective behaviour.
 
 ### 3. Hybrid Recommendation
 
-The content-based and collaborative recommendation scores are combined to generate a ranked list of relevant articles.
+The hybrid engine combines both recommendation approaches using configurable weights.
 
-The hybrid approach aims to address limitations of relying exclusively on article text or historical interactions.
+The final recommendation score is calculated as:
 
-##  Dataset
+`Hybrid Score = (Content Weight × Content Score) + (Collaborative Weight × Collaborative Score)`
+
+This combines textual relevance with patterns in user behaviour.
+
+## Dataset
 
 **CI&T Deskdrop – Articles Sharing and Reading Dataset**
 
-Source: [Kaggle Dataset](https://www.kaggle.com/datasets/gspmoreira/articles-sharing-reading-from-cit-deskdrop)
+The dataset contains article metadata and user interaction records.
 
-| Dataset | Description |
-|---|---|
-| shared_articles.csv | Article metadata and textual content |
-| users_interactions.csv | User engagement and interaction records |
+Source: Kaggle – CI&T Deskdrop Dataset.
 
-Original project dataset statistics:
+### Processed Dataset Statistics
 
-- 3,047 shared articles
-- 72,312 user interaction events
+| Attribute | Count |
+|---|---:|
+| Articles | 3,047 |
+| User interactions | 72,269 |
+| Unique users | 1,895 |
+| Unique interacted articles | 2,979 |
 
-##  Technology Stack
+Interaction types include views, likes, bookmarks, comments, and follows.
+
+The processed datasets are stored in `data/processed/`.
+
+If the original dataset is not included, download it from Kaggle and follow the preprocessing instructions before running the models.
+
+## Model Evaluation
+
+The recommendation approaches were evaluated using a train-test split and ranking metrics.
+
+| Metric | Content-Based | Collaborative | Hybrid |
+|---|---:|---:|---:|
+| Precision@10 | 0.0100 | 0.0160 | 0.0130 |
+| Recall@10 | 0.0363 | 0.0511 | 0.0446 |
+| F1@10 | 0.0125 | 0.0199 | 0.0169 |
+| MAP@10 | 0.0173 | 0.0194 | 0.0229 |
+| NDCG@10 | 0.0264 | 0.0342 | 0.0349 |
+
+The collaborative model achieved the strongest Precision@10, Recall@10, and F1@10 among the evaluated approaches.
+
+The hybrid model achieved the highest MAP@10 and NDCG@10, demonstrating stronger ranking performance in this evaluation.
+
+Note: These are initial benchmark results from the implemented evaluation procedure, not universal performance guarantees.
+
+## Exploratory Data Analysis
+
+The project includes visualizations and reports covering:
+
+- Interaction type distribution.
+- Most popular articles.
+- Most active users.
+- Article popularity distribution.
+- Interaction trends over time.
+- User engagement patterns.
+
+EDA outputs are stored in `results/eda/`.
+
+## Technology Stack
 
 | Category | Technologies |
 |---|---|
-| Language | Python |
+| Programming Language | Python |
 | Data Processing | Pandas, NumPy |
-| NLP | Scikit-learn, TF-IDF |
-| Recommendation | Content-Based and Collaborative Filtering |
+| Machine Learning | Scikit-learn |
+| NLP | TF-IDF |
 | Similarity | Cosine Similarity |
-| Backend | Flask, REST API |
-| Frontend | Streamlit |
-| Visualization | Matplotlib, Plotly |
+| Recommendation | Content-Based and Collaborative Filtering |
+| Visualization | Matplotlib, Seaborn, Plotly |
+| Dashboard | Streamlit |
+| Version Control | Git, GitHub |
 
-##  Project Structure
+## Project Structure
 
 ```text
 RecoMind/
 │
-├── data/
-│   └── README.md
+├── api/
+│   └── app.py
 │
-├── notebooks/
-│   └── recommendation_analysis.ipynb
+├── data/
+│   └── processed/
+│       ├── cleaned_articles.csv
+│       ├── cleaned_interactions.csv
+│       └── user_item_interactions.csv
+│
+├── results/
+│   ├── eda/
+│   │   ├── interaction_distribution.png
+│   │   ├── popular_articles.png
+│   │   ├── active_users.png
+│   │   ├── article_popularity_distribution.png
+│   │   ├── interaction_trends.png
+│   │   └── user_engagement.png
+│   └── model_evaluation.csv
 │
 ├── src/
+│   ├── __init__.py
 │   ├── preprocessing.py
+│   ├── eda.py
 │   ├── content_recommender.py
 │   ├── collaborative_recommender.py
 │   ├── hybrid_recommender.py
 │   └── evaluation.py
 │
-├── api/
-│   └── app.py
-│
-├── dashboard/
-│   └── streamlit_app.py
-│
-├── tests/
-│   └── test_recommendations.py
-│
-├── requirements.txt
 ├── .gitignore
+├── requirements.txt
 ├── README.md
-└── LICENSE
+└── Project138,139,140,141.ipynb
 ```
 
-##  Getting Started
+## Getting Started
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/RecoMind.git
+git clone https://github.com/shereneagnes/RecoMind.git
 cd RecoMind
 ```
 
@@ -134,50 +185,59 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 5. Prepare the dataset
+### 5. Run the Streamlit dashboard
 
-Download the CI&T Deskdrop dataset from Kaggle and place the CSV files in the data directory.
+```bash
+python -m streamlit run api/app.py
+```
 
-Configure Kaggle API credentials locally if using automated dataset downloads.
+The dashboard will open locally in your browser.
 
-### 6. Run the application
+### 6. Run individual modules
 
-The application entry points and execution commands will be provided as the backend and dashboard modules are implemented.
+Data preprocessing:
 
-##  Evaluation Metrics
+```bash
+python -m src.preprocessing
+```
 
-The recommendation engine will be evaluated using:
+Exploratory data analysis:
 
-- Precision@K
-- Recall@K
-- Cosine Similarity
-- Recommendation relevance
-- Coverage and diversity
+```bash
+python -m src.eda
+```
 
-Quantitative results will be added after running the completed implementation.
+Model evaluation:
 
-##  Future Enhancements
+```bash
+python -m src.evaluation
+```
 
-- [ ] Semantic embeddings using sentence-transformer models.
-- [ ] User-specific recommendation profiles.
-- [ ] Advanced ranking and recommendation reranking.
-- [ ] Cold-start recommendation strategies.
-- [ ] Recommendation explanations.
-- [ ] Recommendation API deployment.
-- [ ] Docker-based deployment.
+Ensure the required input datasets are available in `data/processed/` before running modules that depend on them.
 
-##  Learning Outcomes
+## Future Enhancements
 
-- Natural Language Processing and text vectorization.
-- Recommendation system architectures.
-- Content-based and collaborative filtering.
+- Semantic embeddings using Sentence Transformers.
+- Improved cold-start recommendation strategies.
+- Recommendation explanations.
+- Advanced ranking and reranking methods.
+- Recommendation API integration.
+- Docker-based deployment.
+- Online recommendation feedback and updates.
+
+## Learning Outcomes
+
+- Recommendation system architecture and implementation.
+- Natural Language Processing and TF-IDF vectorization.
+- Content-Based and Collaborative Filtering.
 - Similarity computation and ranking.
-- REST API development.
-- Recommendation evaluation and experimentation.
+- Evaluation of recommendation systems.
+- Exploratory data analysis and visualization.
+- Building interactive machine learning applications.
 
-##  License
+## License
 
-This project is licensed under the MIT License.
+This project is distributed under the MIT License. See `LICENSE` for details.
 
 ---
 
